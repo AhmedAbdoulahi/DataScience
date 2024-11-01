@@ -1,20 +1,31 @@
-name: CI
+name: CI datascience project
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "master" ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: install packages
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
         run: make install
-      - name: lint
+
+      - name: Lint with pylint
         run: make lint
-      - name: test
+
+      - name: Test with pytest
         run: make test
